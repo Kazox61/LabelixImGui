@@ -156,6 +156,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\maths\Math.cpp" />
     <ClCompile Include="src\rendering\CameraOrthographic.cpp" />
+    <ClCompile Include="src\rendering\FrameBuffer.cpp" />
     <ClCompile Include="src\rendering\IndexBuffer.cpp" />
     <ClCompile Include="src\rendering\RenderLayer.cpp" />
     <ClCompile Include="src\rendering\Shape.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="include\core\Window.h" />
     <ClInclude Include="include\maths\Math.h" />
     <ClInclude Include="include\rendering\CameraOrthographic.h" />
+    <ClInclude Include="include\rendering\FrameBuffer.h" />
     <ClInclude Include="include\rendering\IndexBuffer.h" />
     <ClInclude Include="include\rendering\Renderer.h" />
     <ClInclude Include="include\rendering\RenderLayer.h" />
