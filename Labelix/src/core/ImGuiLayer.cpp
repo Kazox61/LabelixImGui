@@ -39,7 +39,7 @@ namespace LabelixNS {
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		//ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 	}
 
 	void ImGuiLayer::EndFrame() {

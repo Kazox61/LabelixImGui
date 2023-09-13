@@ -8,6 +8,7 @@
 #include "CameraOrthographic.h"
 #include "Shader.h"
 #include "Shape.h"
+#include "FrameBuffer.h"
 
 #include <vector>
 
@@ -23,6 +24,7 @@ namespace LabelixNS {
 			CameraOrthographic m_MainCamera;
 
 			std::vector<Shape*> m_Shapes;
+			FrameBuffer* m_FrameBuffer;
 
 			void Init();
 			void Clear() const;
@@ -32,7 +34,6 @@ namespace LabelixNS {
 			void AddRect(float x, float y, float width, float height, float thickness, MathNS::Color color);
 			void AddFilledRect(float x, float y, float width, float height, MathNS::Color color);
 			void DrawLine(MathNS::Vector2 from, MathNS::Vector2 to, MathNS::Vector4 color) const;
-			void AddTexture(Texture2d& texture, float x, float y);
 		private:
 			static Renderer* s_Instance;
 

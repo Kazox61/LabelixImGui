@@ -3,6 +3,7 @@
 
 #include "rendering/Renderer.h"
 #include <iostream>
+#include "maths/Math.h"
 
 namespace LabelixNS {
 	WindowSceneRenderer::WindowSceneRenderer() 
@@ -14,59 +15,46 @@ namespace LabelixNS {
 	WindowSceneRenderer::~WindowSceneRenderer() {}
 	void WindowSceneRenderer::OnStartup() {
 		s_Instance = this;
+		m_ActiveTexture = new RenderNS::Texture2d("C:\\temp\\home.png");
+		std::cout << "ActiveTextureId: " << m_ActiveTexture << std::endl;
+		m_Renderer = RenderNS::Renderer::GetInstance();
+
 		
-		/*
-		float vertices[] = {
-			-50.0f, -50.0f,
-			 50.0f, -50.0f,
-			 50.0f,  50.0f,
-			-50.0f,  50.0f
-		};
 
-		unsigned int indices[] = {
-			0, 1, 2,
-			2, 3, 0
-		};
-
-		m_VertexArray = new RenderNS::VertexArray();
-		RenderNS::VertexBuffer vertexBuffer(vertices, 4 * 2 * sizeof(float));
-
-		RenderNS::VertexBufferLayout layout;
-		layout.Push<float>(2);
-		m_VertexArray->AddBuffer(vertexBuffer, layout);
-
-		m_IndexBuffer = new RenderNS::IndexBuffer(indices, 6);
-
-		m_VertexArray->Unbind();
-		vertexBuffer.Unbind();
-		m_IndexBuffer->Unbind();
-		*/
-
-
-		RenderNS::Renderer renderer = *RenderNS::Renderer::GetInstance();
-
-		for (unsigned int x = 0; x < 9; x++) {
-			for (unsigned int y = 0; y < 6; y++) {
-				MathNS::Color color;
-				color.r = x * y * 0.01;
-				color.g = x * y * 0.01;
-				color.b = x * y * 0.01;
-				color.a = 1.0f;
-				renderer.AddFilledRect(x * 100, y * 100, 100, 100, color);
-			}
-		}
-
-
+		MathNS::Color color;
+		color.r = 1.0f;
+		color.g = 0.0f;
+		color.b = 1.0f;
+		color.a = 1.0f;
+		m_Renderer->AddRect(0.0f, 0.0f, 100.0f, 100.0f, 1, color);
 	}
-	void WindowSceneRenderer::OnUpdate() {}
+	void WindowSceneRenderer::OnUpdate() {
+		
+	}
+
 	void WindowSceneRenderer::OnRender() {
 		if (m_ActiveTexture != nullptr) {
+			std::cout << "Render Texture" << std::endl;
 			m_ActiveTexture->Render();
 		}
 	}
+
 	void WindowSceneRenderer::OnImGuiRender() {
 		if (!m_IsOpen) return;
 		ImGui::Begin(m_WindowName, &m_IsOpen);
+		ImVec2 size = ImGui::GetContentRegionAvail();
+		
+		if (size.x != m_WidowWidth || size.y != m_WindowHeight) {
+			m_WidowWidth = size.x;
+			m_WindowHeight = size.y;
+			std::cout << "Screensize = " << size.x << " , " << size.y << std::endl;
+			m_Renderer->m_FrameBuffer->UpdateSize(size.x, size.y);
+
+			m_Renderer->m_MainCamera.m_Projection = glm::ortho(0.0f, size.x, 0.0f, size.y, -1.0f, 1.0f);
+		}
+		ImVec2 uv0 = ImVec2(0.0f, 1.0f);
+		ImVec2 uv1 = ImVec2(1.0f, 0.0f);
+		ImGui::Image((void*)(intptr_t)m_Renderer->m_FrameBuffer->m_TextureId, size, uv0, uv1);
 
 		ImGui::End();
 	}

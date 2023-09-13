@@ -29,18 +29,8 @@ namespace LabelixNS {
 			m_ShaderDefault->SetUniform4f("u_Color", 1.0f, 0.0f, 1.0f, 1.0f);
 			m_ShaderTexture = new Shader("assets/shaders/TextureShader.shader");
 
+			m_FrameBuffer = new FrameBuffer();
 			std::cout << this << std::endl;
-
-			for (unsigned int x = 0; x < 9; x++) {
-				for (unsigned int y = 0; y < 6; y++) {
-					MathNS::Color color;
-					color.r = x * y * 0.01;
-					color.g = x * y * 0.01;
-					color.b = x * y * 0.01;
-					color.a = 1.0f;
-					AddFilledRect(x * 100, y * 100, 100, 100, color);
-				}
-			}
 		}
 
 		void Renderer::Clear() const {
@@ -72,8 +62,60 @@ namespace LabelixNS {
 		}
 
 		void Renderer::AddRect(float x, float y, float width, float height, float thickness, MathNS::Color color) {
+			float vertices[] = {
+				x, y,
+				x + width - thickness, y,
+				x + width - thickness, y + thickness,
+				x, y + thickness,
 
+				x + width - thickness, y,
+				x + width, y,
+				x + width, y + height - thickness,
+				x + width - thickness, y + height - thickness,
+
+				x + width, y + height - thickness,
+				x + width, y + height,
+				x + thickness, y + height,
+				x + thickness, y + height - thickness,
+
+				x + thickness, y + height,
+				x, y + height,
+				x, y + thickness,
+				x + thickness, y + thickness
+			};
+
+			unsigned int indices[] = {
+				0,1,2,
+				2,3,0,
+
+				4,5,6,
+				6,7,4,
+
+				8,9,10,
+				10,11,8,
+
+				12,13,14,
+				14,15,12
+			};
+
+			VertexArray* vertexArray = new VertexArray();
+			RenderNS::VertexBuffer vertexBuffer(vertices, 4 * 8 * sizeof(float));
+
+			RenderNS::VertexBufferLayout layout;
+			layout.Push<float>(2);
+			vertexArray->AddBuffer(vertexBuffer, layout);
+
+			IndexBuffer* indexBuffer = new IndexBuffer(indices, 24);
+
+			vertexArray->Unbind();
+			vertexBuffer.Unbind();
+			indexBuffer->Unbind();
+
+			Shape* shape = new Shape(MathNS::Vector3(), vertexArray, indexBuffer, color);
+
+			m_Shapes.push_back(shape);
 		}
+
 		void Renderer::AddFilledRect(float x, float y, float width, float height, MathNS::Color color) {
 			float vertices[] = {
 				x, y,
@@ -103,25 +145,8 @@ namespace LabelixNS {
 			Shape* shape = new Shape(MathNS::Vector3(), vertexArray, indexBuffer, color);
 
 			m_Shapes.push_back(shape);
+		} 
 
-			std::cout << m_Shapes.size() << std::endl;
-		}
-
-		void Renderer::AddTexture(Texture2d& texture, float x, float y) {
-			float vertices[] = {
-			-50.0f, -50.0f, 0.0f, 0.0f,
-			 50.0f, -50.0f, 1.0f, 0.0f,
-			 50.0f,  50.0f, 1.0f, 1.0f,
-			-50.0f,  50.0f, 0.0f, 1.0f
-			};
-
-			unsigned int indices[] = {
-				0,1,2,
-				2,3,0
-			};
-			
-
-		}
 
 		void Renderer::EnableBlend() const {
 			GLCall(glEnable(GL_BLEND));

@@ -23,13 +23,14 @@ namespace LabelixNS {
 		while (!m_Window->ShouldClose()) {
 			deltaTime = (float)(glfwGetTime() - previousTime);
 			previousTime = glfwGetTime();
-			m_Renderer.Clear();
+			m_Renderer.m_FrameBuffer->Activate();
 			m_Window->PollInput();
 			m_ImGuiLayer->BeginFrame();
 
 			m_ControllerWindows.OnUpdate();
 			m_ControllerWindows.OnRender();
 			m_Renderer.Draw();
+			m_Renderer.m_FrameBuffer->Deactivate();
 			m_ControllerWindows.OnImGuiRender();
 
 			

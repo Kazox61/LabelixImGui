@@ -20,7 +20,7 @@ namespace LabelixNS {
 		void OnRender() override;
 		void OnImGuiRender() override;
 	private:
-
+		RenderNS::Renderer* m_Renderer;
 		RenderNS::VertexArray* m_VertexArray;
 		RenderNS::IndexBuffer* m_IndexBuffer;
 	};

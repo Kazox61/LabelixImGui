@@ -5,6 +5,8 @@ namespace LabelixNS {
 	public:
 		bool m_IsOpen;
 		const char* m_WindowName;
+		unsigned int m_WidowWidth;
+		unsigned int m_WindowHeight;
 
 		DockedWindow() {}
 
