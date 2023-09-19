@@ -1,4 +1,4 @@
-# Labelix
+# LabelixImGui
 
 A Labeling Tool for creating YOLO datasets. Still work in progress.
 
